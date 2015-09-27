@@ -1,0 +1,60 @@
+---
+title       : Developing Data Products
+subtitle    : Slidify Project - Automobile mpg Prediction
+author      : Mike Stillman
+logo        : Star.png
+job         : 
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : []            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+
+## Introduction
+
+<p>Are you interested in validating the miles per gallon of your automobile?</p>
+<p>Are you interested in ensuring that salesperson is telliing the truth about the automobile you want to buy?</p>
+<p>Check out this App which will determine the miles per gallon (mpg) of the automobile based on historic mpg automobile data.</p>
+<p><a> https://mpstills.shinyapps.io/Project</a></p>
+
+--- .class #id 
+
+## Data
+
+1. For the Automobile mpg Prediction App, the mtcars R dataset was used to create the model.
+```{r LoadData, echo=TRUE}
+library(datasets)
+head(mtcars)
+nrow(mtcars)
+```
+
+--- .class #id 
+
+## Model
+
+1. The Automobile mpg Prediction app uses a multiple covariate regression model.
+2. Initially, the model will be trained and validated with a training and test data set.
+3. The model is created using the R caret package.
+```{r mpgmodel, echo=TRUE}
+library(caret)
+inTrain<-createDataPartition(y=mtcars$mpg,p=0.75,list=FALSE)
+training<-mtcars[inTrain,]
+modFit<- train(mpg ~ cyl + hp + wt , method = "lm", data=training)
+```
+4. The model is then used within the server.R shiny app file to produce interactivity with this app.
+```{r function, echo=TRUE}
+mpgprec <- function(cyl, hp, wt) 
+{ data <- data.frame(cyl, hp, wt)
+  predict(modFit,newdata=data)}
+```
+
+--- .class #id 
+
+## Conclusion
+
+<p> Using the Shiny and Slidify R packages, the Automobile mpg Prediction app is a simple use case, but shows the capabilities of these R packages.</p>
+<p> Use this URL to access the app.  <a>https://mpstills.shinyapps.io/Project</a></p>
+
+--- .class #id 
